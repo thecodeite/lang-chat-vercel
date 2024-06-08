@@ -19,6 +19,7 @@ const HeaderBarContainer = styled.header`
 
 const MainMenuButton = styled.button`
   display: block;
+  color: var(--main-fg-color);
   background-color: var(--accent-fg-color);
   border: 1px solid var(--main-border-color);
 
@@ -41,6 +42,7 @@ const UserButton = styled.button`
   height: 4rem;
 
   border-radius: 50%;
+  color: var(--main-fg-color);
   background-color: var(--accent-fg-color);
   border: 1px solid var(--main-border-color);
 
