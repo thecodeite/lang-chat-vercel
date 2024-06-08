@@ -1,12 +1,9 @@
-
+import { HeaderBar } from './components/header-bar/HeaderBar'
 
 function App() {
-  
-
   return (
     <>
-      Lang Chat
-      
+      <HeaderBar />
     </>
   )
 }
