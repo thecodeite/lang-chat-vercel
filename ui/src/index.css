@@ -10,11 +10,15 @@
 
   color-scheme: light dark;
 
-  --main-fg-color: rgba(255, 255, 255, 0.87);
+  --main-fg-color: hwb(0 100% 0% / 0.87);
   --accent-fg-color: hsl(238, 14%, 38%);
-  --main-bg-color: rgb(36, 36, 36);
+  --disabled-fg-color: hwb(0 100% 0% / 0.47);
+  --main-bg-color: hwb(0 14% 86%);
   --accent-bg-color: hwb(240 24% 73%);
+  --disabled-bg-color: hwb(240 24% 83%);
   --main-border-color: hwb(240 54% 73%);
+  --link-fg-color: hsl(240, 100%, 67%);
+  --shadow-color: rgba(255,255,255, 0.2);
 
   color: var(--main-fg-color);
   background-color: var(--main-bg-color);

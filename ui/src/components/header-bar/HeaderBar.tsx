@@ -15,6 +15,7 @@ const HeaderBarContainer = styled.header`
   background-position-x: center;
 
   font-size: 3rem;
+  height: 5rem;
 `
 
 const MainMenuButton = styled.button`
@@ -83,26 +84,30 @@ const HeaderInfo = styled.div`
   align-self: center;
 `
 
-export function HeaderBar() {
+export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
   const [showMenu, setShowMenu] = useState(false)
 
   return (
     <HeaderBarContainer>
-      <MainMenuButton onClick={() => setShowMenu((x) => !x)}>
-        <GiHamburgerMenu />
-      </MainMenuButton>
+      {signedIn && (
+        <>
+          <MainMenuButton onClick={() => setShowMenu((x) => !x)}>
+            <GiHamburgerMenu />
+          </MainMenuButton>
 
-      <HeaderItems show={showMenu}>
-        <HeaderItem>Home</HeaderItem>
-        <HeaderItem>New Chat</HeaderItem>
-        <HeaderItem>Old Chats</HeaderItem>
-      </HeaderItems>
+          <HeaderItems show={showMenu}>
+            <HeaderItem>Home</HeaderItem>
+            <HeaderItem>New Chat</HeaderItem>
+            <HeaderItem>Old Chats</HeaderItem>
+          </HeaderItems>
 
-      <HeaderInfo>
-        <UserButton>
-          <FaUser />
-        </UserButton>
-      </HeaderInfo>
+          <HeaderInfo>
+            <UserButton>
+              <FaUser />
+            </UserButton>
+          </HeaderInfo>
+        </>
+      )}
     </HeaderBarContainer>
   )
 }
