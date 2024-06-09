@@ -23,6 +23,7 @@ const Box = styled.div`
   background-color: var(--accent-bg-color);
   border-radius: 8px;
   border: 1px solid var(--main-border-color);
+  max-width: 500px;
 `
 
 const HeaderTabs = styled.div`

@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { signOut } from 'supertokens-web-js/recipe/session'
 
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { FaUser } from 'react-icons/fa'
@@ -102,7 +103,7 @@ export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
           </HeaderItems>
 
           <HeaderInfo>
-            <UserButton>
+            <UserButton onClick={() => signOut()}>
               <FaUser />
             </UserButton>
           </HeaderInfo>
