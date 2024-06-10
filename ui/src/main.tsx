@@ -12,9 +12,9 @@ import './index.css'
 SuperTokens.init({
   appInfo: {
     // apiDomain: 'http://localhost:3001',
-    apiDomain: 'https://lang-chat.local.plews.uk',
+    apiDomain: window.location.origin,
     // apiDomain: 'https://lang-chat-ggbc.onrender.com',
-    apiBasePath: '/auth',
+    apiBasePath: '/api/auth',
     appName: 'Lang Chat',
   },
   recipeList: [Session.init(), EmailPassword.init(), ThirdParty.init()],
