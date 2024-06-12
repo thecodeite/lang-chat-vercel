@@ -9,7 +9,11 @@ import { ChatPage } from './pages/chat/ChatPage'
 import { ListChatsPage } from './pages/list-chats/ListChatsPage'
 import { SignInPage } from './pages/sign-in/SignInPage'
 
-const AppRoot = styled.div``
+const AppRoot = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`
 
 export function MainRouter() {
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null)
@@ -43,7 +47,7 @@ export function MainRouter() {
         <HeaderBar signedIn />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/chat/:id" element={<ChatPage />} />
           <Route path="/list-chats" element={<ListChatsPage />} />
           <Route path="*" element={<div>404</div>} />
         </Routes>

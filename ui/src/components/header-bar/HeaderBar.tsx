@@ -4,6 +4,7 @@ import { signOut } from 'supertokens-web-js/recipe/session'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { FaUser } from 'react-icons/fa'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const HeaderBarContainer = styled.header`
   position: relative;
@@ -48,15 +49,16 @@ const UserButton = styled.button`
   background-color: var(--accent-fg-color);
   border: 1px solid var(--main-border-color);
 
+  cursor: pointer;
   svg {
     width: 80%;
     height: 80%;
   }
 `
 
-const HeaderItems = styled.div<{ show: boolean }>`
+const HeaderItems = styled.div<{ $show: boolean }>`
   @media (max-width: 767px) {
-    display: ${(p) => (p.show ? 'flex' : 'none')};
+    display: ${(p) => (p.$show ? 'flex' : 'none')};
     position: absolute;
     top: calc(4rem + 16px);
     left: 8px;
@@ -77,6 +79,12 @@ const HeaderItem = styled.div`
   @media (min-width: 768px) {
     padding: 4px;
     margin-left: 16px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--accent-fg-color);
+      color: var(--main-fg-color);
+    }
   }
 `
 
@@ -87,7 +95,17 @@ const HeaderInfo = styled.div`
 
 export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
   const [showMenu, setShowMenu] = useState(false)
+  const navigate = useNavigate()
 
+  function startNewChat() {
+    fetch('/api/start-chat', {
+      method: 'GET',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        navigate(`/chat/${data.chat.id}`)
+      })
+  }
   return (
     <HeaderBarContainer>
       {signedIn && (
@@ -96,14 +114,23 @@ export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
             <GiHamburgerMenu />
           </MainMenuButton>
 
-          <HeaderItems show={showMenu}>
-            <HeaderItem>Home</HeaderItem>
-            <HeaderItem>New Chat</HeaderItem>
-            <HeaderItem>Old Chats</HeaderItem>
+          <HeaderItems $show={showMenu}>
+            <HeaderItem onClick={() => navigate('/')}>Home</HeaderItem>
+            <HeaderItem onClick={() => startNewChat()}>New Chat</HeaderItem>
+            <HeaderItem onClick={() => navigate('/list-chats')}>
+              Old Chats
+            </HeaderItem>
           </HeaderItems>
 
           <HeaderInfo>
-            <UserButton onClick={() => signOut()}>
+            <UserButton
+              onClick={() => {
+                signOut()
+                setTimeout(() => {
+                  window.location.reload()
+                }, 1000)
+              }}
+            >
               <FaUser />
             </UserButton>
           </HeaderInfo>

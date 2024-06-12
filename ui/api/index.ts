@@ -1,44 +1,11 @@
 import express from 'express/index.js'
-import supertokens from 'supertokens-node'
 import Session from 'supertokens-node/recipe/session/index.js'
 // // import { verifySession } from 'supertokens-node/recipe/session/framework/express'
 import {
   middleware,
   errorHandler,
 } from 'supertokens-node/framework/express/index.js'
-import EmailPassword from 'supertokens-node/recipe/emailpassword/index.js'
-import EmailVerification from 'supertokens-node/recipe/emailverification/index.js'
-import Dashboard from 'supertokens-node/recipe/dashboard/index.js'
-
-const apiDomain =
-  process.env.VERCEL_URL !== undefined
-    ? process.env.VERCEL_URL
-    : `https://lang-chat.local.plews.uk`
-const websiteDomain =
-  process.env.VERCEL_URL !== undefined
-    ? process.env.VERCEL_URL
-    : `https://lang-chat.local.plews.uk`
-
-supertokens.init({
-  framework: 'express',
-  supertokens: {
-    connectionURI: process.env.SUPERTOKENS__CONNECTION_URL,
-    apiKey: process.env.SUPERTOKENS__API_KEY,
-  },
-  appInfo: {
-    appName: 'Lang Chat Vercel',
-    apiDomain,
-    websiteDomain,
-    apiBasePath: '/api/auth',
-    websiteBasePath: '/',
-  },
-  recipeList: [
-    EmailVerification.init({ mode: 'REQUIRED' }),
-    EmailPassword.init(),
-    Session.init(),
-    Dashboard.init(),
-  ],
-})
+import './_st/init.js'
 
 export const app = express()
 
@@ -70,7 +37,16 @@ app.use(middleware())
 // //   })
 // // })
 
-app.get('/api/hello', (req, res) => {
+app.get('/hello', async (req, res) => {
+  return res.send('Hello, World!')
+})
+app.get('/api/hello', async (req, res) => {
+  // console.log(req.headers)
+  const session = await Session.getSession(req, res)
+  const userId = session.getUserId()
+
+  return res.status(200).json({ userId })
+
   res.send('Hello, World!')
 })
 
