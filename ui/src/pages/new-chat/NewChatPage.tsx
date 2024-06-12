@@ -1,8 +1,7 @@
-import React from 'react'
 import { useEffect } from 'react'
 import { useNavTo } from '../../helpers/navTo'
 
-export function NewChat() {
+export function NewChatPage() {
   const navTo = useNavTo()
 
   useEffect(() => {
@@ -11,7 +10,7 @@ export function NewChat() {
     })
       .then((res) => res.json())
       .then((data) => {
-        navTo('Chat', [data.chatId])
+        navTo('Chat', data.chatId)
       })
   }, [navTo])
 

@@ -8,7 +8,7 @@ import { HomePage } from './pages/home/HomePage'
 import { ChatPage } from './pages/chat/ChatPage'
 import { ListChatsPage } from './pages/list-chats/ListChatsPage'
 import { SignInPage } from './pages/sign-in/SignInPage'
-import { NewChat } from './pages/new-chat/NewChat'
+import { NewChatPage } from './pages/new-chat/NewChatPage'
 
 const AppRoot = styled.div`
   height: 100%;
@@ -48,7 +48,7 @@ export function MainRouter() {
         <HeaderBar signedIn />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/page/new-chat" element={<NewChat />} />
+          <Route path="/page/new-chat" element={<NewChatPage />} />
           <Route path="/page/chat/:id" element={<ChatPage />} />
           <Route path="/page/list-chats" element={<ListChatsPage />} />
           <Route path="*" element={<div>404</div>} />
