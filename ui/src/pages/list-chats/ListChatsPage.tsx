@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
+import { useNavTo } from '../../helpers/navTo'
 
 interface ExistingChat {
   id: string
@@ -38,7 +38,7 @@ const ChatButton = styled.button`
 `
 
 export function ListChatsPage() {
-  const navigate = useNavigate()
+  const navTo = useNavTo()
   const [chats, setChats] = useState<ExistingChat[]>([])
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export function ListChatsPage() {
           <ChatItem>
             <ChatButton
               onClick={() => {
-                navigate('/chat/' + chat.id)
+                navTo('Chat', chat.id)
               }}
             >
               <h3>Question: {chat.summary}</h3>

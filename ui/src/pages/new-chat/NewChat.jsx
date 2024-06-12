@@ -1,9 +1,9 @@
 import React from 'react'
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavTo } from '../../helpers/navTo'
 
 export function NewChat() {
-  const navigate = useNavigate()
+  const navTo = useNavTo()
 
   useEffect(() => {
     fetch('/api/start-chat', {
@@ -11,9 +11,9 @@ export function NewChat() {
     })
       .then((res) => res.json())
       .then((data) => {
-        navigate(`/chat/${data.chat.id}`)
+        navTo('Chat', [data.chatId])
       })
-  }, [navigate])
+  }, [navTo])
 
   return (
     <div>

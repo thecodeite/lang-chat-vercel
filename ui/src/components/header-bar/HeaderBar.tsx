@@ -4,7 +4,7 @@ import { signOut } from 'supertokens-web-js/recipe/session'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { FaUser } from 'react-icons/fa'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavTo } from '../../helpers/navTo'
 
 const HeaderBarContainer = styled.header`
   position: relative;
@@ -95,7 +95,7 @@ const HeaderInfo = styled.div`
 
 export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
   const [showMenu, setShowMenu] = useState(false)
-  const navigate = useNavigate()
+  const navTo = useNavTo()
 
   return (
     <HeaderBarContainer>
@@ -109,7 +109,7 @@ export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
             <HeaderItem
               onClick={() => {
                 setShowMenu(false)
-                navigate('/')
+                navTo('Home')
               }}
             >
               Home
@@ -117,7 +117,7 @@ export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
             <HeaderItem
               onClick={() => {
                 setShowMenu(false)
-                navigate('/new-chat')
+                navTo('NewChat')
               }}
             >
               New Chat
@@ -125,7 +125,7 @@ export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
             <HeaderItem
               onClick={() => {
                 setShowMenu(false)
-                navigate('/list-chats')
+                navTo('ListChats')
               }}
             >
               Old Chats

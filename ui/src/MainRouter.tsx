@@ -34,7 +34,7 @@ export function MainRouter() {
         <BrowserRouter>
           <HeaderBar />
           <Routes>
-            <Route path="/sign-up" element={<SignInPage signUp />} />
+            <Route path="/page/sign-up" element={<SignInPage signUp />} />
             <Route path="*" element={<SignInPage />} />
           </Routes>
         </BrowserRouter>
@@ -48,9 +48,9 @@ export function MainRouter() {
         <HeaderBar signedIn />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/new-chat" element={<NewChat />} />
-          <Route path="/chat/:id" element={<ChatPage />} />
-          <Route path="/list-chats" element={<ListChatsPage />} />
+          <Route path="/page/new-chat" element={<NewChat />} />
+          <Route path="/page/chat/:id" element={<ChatPage />} />
+          <Route path="/page/list-chats" element={<ListChatsPage />} />
           <Route path="*" element={<div>404</div>} />
         </Routes>
       </BrowserRouter>
