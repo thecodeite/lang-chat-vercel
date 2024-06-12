@@ -97,15 +97,6 @@ export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
   const [showMenu, setShowMenu] = useState(false)
   const navigate = useNavigate()
 
-  function startNewChat() {
-    fetch('/api/start-chat', {
-      method: 'GET',
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        navigate(`/chat/${data.chat.id}`)
-      })
-  }
   return (
     <HeaderBarContainer>
       {signedIn && (
@@ -115,9 +106,28 @@ export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
           </MainMenuButton>
 
           <HeaderItems $show={showMenu}>
-            <HeaderItem onClick={() => navigate('/')}>Home</HeaderItem>
-            <HeaderItem onClick={() => startNewChat()}>New Chat</HeaderItem>
-            <HeaderItem onClick={() => navigate('/list-chats')}>
+            <HeaderItem
+              onClick={() => {
+                setShowMenu(false)
+                navigate('/')
+              }}
+            >
+              Home
+            </HeaderItem>
+            <HeaderItem
+              onClick={() => {
+                setShowMenu(false)
+                navigate('/new-chat')
+              }}
+            >
+              New Chat
+            </HeaderItem>
+            <HeaderItem
+              onClick={() => {
+                setShowMenu(false)
+                navigate('/list-chats')
+              }}
+            >
               Old Chats
             </HeaderItem>
           </HeaderItems>
