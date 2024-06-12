@@ -59,6 +59,7 @@ const Input = styled.input`
   border-radius: 10px;
   border: none;
   margin-right: 10px;
+  font-size: 16px;
 `
 
 const Button = styled.button`

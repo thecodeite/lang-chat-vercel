@@ -102,6 +102,7 @@ const Input = styled.input`
   background-color: var(--main-bg-color);
   color: var(--main-fg-color);
   width: 100%;
+  font-size: 16px;
 `
 
 const SignInButton = styled.button`
