@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import { useNavigate } from 'react-router-dom'
+import { useNavTo } from '../../helpers/navTo'
 
 import { signOut } from 'supertokens-web-js/recipe/session'
 import { LinkButton } from '../../components/atoms/LinkButton'
@@ -117,12 +117,12 @@ const SignInButton = styled.button`
 // #endregion
 
 export function SignInPage({ signUp }: { signUp?: boolean }) {
-  const navigate = useNavigate()
+  const navTo = useNavTo()
   const pageMode = signUp ? 'sign-up' : 'sign-in'
 
   const isSignedIn = false as boolean
-  const switchToSignIn = () => navigate('/')
-  const switchToSignUp = () => navigate('/sign-up')
+  const switchToSignIn = () => navTo('Home')
+  const switchToSignUp = () => navTo('SignUp')
 
   if (isSignedIn === null) return <div>Loading...</div>
 
