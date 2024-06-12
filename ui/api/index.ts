@@ -5,7 +5,7 @@ import {
   middleware,
   errorHandler,
 } from 'supertokens-node/framework/express/index.js'
-import './_st/init.js'
+import '../api-lib/init.js'
 
 export const app = express()
 

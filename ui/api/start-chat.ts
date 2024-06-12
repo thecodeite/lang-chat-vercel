@@ -1,10 +1,10 @@
 import { sql } from '@vercel/postgres'
 import Session from 'supertokens-node/recipe/session/index.js'
 
-import './_st/init.js'
+import '../api-lib/init.js'
 
 import { VercelRequest, VercelResponse } from '@vercel/node'
-import { makeId } from './_st/make-id.js'
+import { makeId } from '../api-lib/make-id.js'
 
 export default async function handler(
   request: VercelRequest,

@@ -2,7 +2,7 @@ import Session from 'supertokens-node/recipe/session/index.js'
 import { sql } from '@vercel/postgres'
 import { VercelRequest, VercelResponse } from '@vercel/node'
 
-import './_st/init.ts'
+import '../api-lib/init.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const session = await Session.getSession(req, res)
