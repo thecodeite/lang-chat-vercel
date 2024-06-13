@@ -35,10 +35,23 @@
   :root {
     --main-fg-color: #213547;
     --main-bg-color: #ffffff;
+    --disabled-bg-color: hwb(0 100% 0% / 0.47);
+    --accent-bg-color: hwb(240 69% 22%);
+  --accent-fg-color: hwb(240 24% 73%);
+  --disabled-fg-color: hwb(240 24% 83%);
+  --main-border-color: hwb(0 21% 79%);
+  --link-fg-color: hsl(240, 71%, 41%);
+  --shadow-color: rgba(255,255,255, 0.2);
   }
 }
 
-
+a {
+  color: var(--link-fg-color);
+  text-decoration: none;
+}
+a:visited {
+  color: var(--link-fg-color);
+}
 body {
   height: 100%;
   margin: 0;
