@@ -53,7 +53,7 @@ export function ListChatsPage() {
     <div>
       <ListOfChats>
         {chats.map((chat) => (
-          <ChatItem>
+          <ChatItem key={chat.id}>
             <ChatButton
               onClick={() => {
                 navTo('Chat', chat.id)

@@ -27,6 +27,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+  height: 100%;
 }
 
 @media (prefers-color-scheme: light) {
@@ -36,10 +38,10 @@
   }
 }
 
+
 body {
+  height: 100%;
   margin: 0;
-  height: 100vh;
-  margin: 0 auto;
   background-color: black;
 }
 

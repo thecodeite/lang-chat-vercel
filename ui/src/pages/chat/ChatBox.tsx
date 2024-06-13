@@ -6,9 +6,11 @@ import React from 'react'
 import { ChatHistory, useChat } from './useChat'
 
 const ChatBoxContainer = styled.div`
-  height: 100%;
+  height: calc(100% - 50px);
+  //height: 100%;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 `
 
 const ChatArea = styled.div`
@@ -17,12 +19,16 @@ const ChatArea = styled.div`
 
   width: 100%;
   padding: 10px;
-  overflow-y: auto;
 
   flex: 1;
 `
 const ChatPad = styled.div`
   flex: 1;
+`
+
+const ChatMessages = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 const ChatMessage = styled.div`
@@ -47,10 +53,17 @@ const ChatMessageReceived = styled(ChatMessage)`
   text-align: left;
 `
 
+const UnderChat = styled.div`
+  height: 40px;
+`
+
 const InputForm = styled.form`
   display: flex;
   width: 100%;
   padding: 10px;
+  position: fixed;
+  bottom: 0;
+  background-color: #ffffff10;
 `
 
 const Input = styled.input`
@@ -83,8 +96,9 @@ export function ChatBox({
 
   useEffect(() => {
     // scroll to bottom of chat
+
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+      scrollRef.current.scrollTop = 999999
     }
   }, [messages])
 
@@ -95,26 +109,29 @@ export function ChatBox({
   }
 
   return (
-    <ChatBoxContainer>
-      <ChatArea ref={scrollRef}>
+    <ChatBoxContainer ref={scrollRef}>
+      <ChatArea>
         <ChatPad></ChatPad>
-        {messages.map((message) => {
-          if (message.role === 'assistant') {
-            return (
-              <ChatMessageSent key={message.content}>
-                {message.content}
-              </ChatMessageSent>
-            )
-          } else if (message.role === 'user') {
-            return (
-              <ChatMessageReceived key={message.content}>
-                {message.content}
-              </ChatMessageReceived>
-            )
-          } else {
-            return null
-          }
-        })}
+        <ChatMessages>
+          {messages.map((message) => {
+            if (message.role === 'assistant') {
+              return (
+                <ChatMessageSent key={message.content}>
+                  {message.content}
+                </ChatMessageSent>
+              )
+            } else if (message.role === 'user') {
+              return (
+                <ChatMessageReceived key={message.content}>
+                  {message.content}
+                </ChatMessageReceived>
+              )
+            } else {
+              return null
+            }
+          })}
+        </ChatMessages>
+        <UnderChat />
       </ChatArea>
       <InputForm onSubmit={handleSend}>
         <Input

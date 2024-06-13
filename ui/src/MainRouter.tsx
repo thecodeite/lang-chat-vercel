@@ -12,8 +12,8 @@ import { NewChatPage } from './pages/new-chat/NewChatPage'
 
 const AppRoot = styled.div`
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  /* display: flex; */
+  /* flex-direction: column; */
 `
 
 export function MainRouter() {

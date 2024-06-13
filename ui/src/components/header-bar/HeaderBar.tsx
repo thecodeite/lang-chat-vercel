@@ -7,7 +7,10 @@ import { useState } from 'react'
 import { useNavTo } from '../../helpers/navTo'
 
 const HeaderBarContainer = styled.header`
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   margin: 0;
   padding: 4px;
@@ -17,6 +20,10 @@ const HeaderBarContainer = styled.header`
   background-position-x: center;
 
   font-size: 3rem;
+  height: 5rem;
+`
+
+const SpaceUnderBar = styled.div`
   height: 5rem;
 `
 
@@ -98,54 +105,57 @@ export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
   const navTo = useNavTo()
 
   return (
-    <HeaderBarContainer>
-      {signedIn && (
-        <>
-          <MainMenuButton onClick={() => setShowMenu((x) => !x)}>
-            <GiHamburgerMenu />
-          </MainMenuButton>
+    <>
+      <HeaderBarContainer>
+        {signedIn && (
+          <>
+            <MainMenuButton onClick={() => setShowMenu((x) => !x)}>
+              <GiHamburgerMenu />
+            </MainMenuButton>
 
-          <HeaderItems $show={showMenu}>
-            <HeaderItem
-              onClick={() => {
-                setShowMenu(false)
-                navTo('Home')
-              }}
-            >
-              Home
-            </HeaderItem>
-            <HeaderItem
-              onClick={() => {
-                setShowMenu(false)
-                navTo('NewChat')
-              }}
-            >
-              New Chat
-            </HeaderItem>
-            <HeaderItem
-              onClick={() => {
-                setShowMenu(false)
-                navTo('ListChats')
-              }}
-            >
-              Old Chats
-            </HeaderItem>
-          </HeaderItems>
+            <HeaderItems $show={showMenu}>
+              <HeaderItem
+                onClick={() => {
+                  setShowMenu(false)
+                  navTo('Home')
+                }}
+              >
+                Home
+              </HeaderItem>
+              <HeaderItem
+                onClick={() => {
+                  setShowMenu(false)
+                  navTo('NewChat')
+                }}
+              >
+                New Chat
+              </HeaderItem>
+              <HeaderItem
+                onClick={() => {
+                  setShowMenu(false)
+                  navTo('ListChats')
+                }}
+              >
+                Old Chats
+              </HeaderItem>
+            </HeaderItems>
 
-          <HeaderInfo>
-            <UserButton
-              onClick={() => {
-                signOut()
-                setTimeout(() => {
-                  window.location.reload()
-                }, 1000)
-              }}
-            >
-              <FaUser />
-            </UserButton>
-          </HeaderInfo>
-        </>
-      )}
-    </HeaderBarContainer>
+            <HeaderInfo>
+              <UserButton
+                onClick={() => {
+                  signOut()
+                  setTimeout(() => {
+                    window.location.reload()
+                  }, 1000)
+                }}
+              >
+                <FaUser />
+              </UserButton>
+            </HeaderInfo>
+          </>
+        )}
+      </HeaderBarContainer>
+      <SpaceUnderBar>Space</SpaceUnderBar>
+    </>
   )
 }
