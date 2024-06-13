@@ -7,17 +7,18 @@ import { useState } from 'react'
 import { useNavTo } from '../../helpers/navTo'
 
 const HeaderBarContainer = styled.header`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   display: flex;
-  margin: 0;
   padding: 4px;
   background-color: var(--accent-bg-color);
   background-image: url('/logo.svg');
   background-repeat: no-repeat;
   background-position-x: center;
+  margin: 0;
+  border-bottom: 1px solid var(--main-border-color);
 
   font-size: 3rem;
   height: 5rem;

@@ -14,6 +14,7 @@ export interface ChatHistory {
 export function useChat(chatId: string, init: ChatHistory[]) {
   const messageRef = useRef<ChatHistory[]>(init)
   const [messages, setMessages] = useState<ChatHistory[]>(init)
+  const [messagePending, setMessagePending] = useState(false)
 
   const addMessage = (role: 'assistant' | 'user', content: string) => {
     messageRef.current = [...messageRef.current, { role, content }]
@@ -22,6 +23,7 @@ export function useChat(chatId: string, init: ChatHistory[]) {
 
   const sendMessage = async (userMessage: string) => {
     addMessage('user', userMessage)
+    setMessagePending(true)
 
     const res = await fetch(`/api/chat-gpt?id=${chatId}`, {
       method: 'POST',
@@ -33,11 +35,13 @@ export function useChat(chatId: string, init: ChatHistory[]) {
 
     if (res.ok) {
       const body = await res.text()
+      setMessagePending(false)
       addMessage('assistant', body)
     } else {
+      setMessagePending(false)
       addMessage('assistant', 'The AI did not respond')
     }
   }
 
-  return [messages, sendMessage] as const
+  return [messages, sendMessage, messagePending] as const
 }

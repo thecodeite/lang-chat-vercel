@@ -90,7 +90,7 @@ export function ChatBox({
   chatId: string
   init: ChatHistory[]
 }) {
-  const [messages, sendMessage] = useChat(chatId, init)
+  const [messages, sendMessage, messagePending] = useChat(chatId, init)
   const [newMessageText, setNewMessageText] = useState('')
   const scrollRef = React.useRef<HTMLDivElement>(null)
 
@@ -130,6 +130,11 @@ export function ChatBox({
               return null
             }
           })}
+          {messagePending && (
+            <ChatMessageSent>
+              <Dots />
+            </ChatMessageSent>
+          )}
         </ChatMessages>
         <UnderChat />
       </ChatArea>
@@ -142,5 +147,23 @@ export function ChatBox({
         <Button type="submit">Send</Button>
       </InputForm>
     </ChatBoxContainer>
+  )
+}
+
+function Dots() {
+  const [dots, setDots] = useState(1)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDots((dots) => (dots % 3) + 1)
+    }, 500)
+    return () => clearInterval(interval)
+  }, [])
+  return (
+    <div>
+      {' '}
+      {Array.from({ length: dots }).map((_, i) => (
+        <span key={i}>.</span>
+      ))}
+    </div>
   )
 }
