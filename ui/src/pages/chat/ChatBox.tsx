@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import React from 'react'
 
 import { ChatHistory, useChat } from './useChat'
+import { ButtonWithOptions } from '../../components/atoms/button-with-options/ButtonWithOptions'
 
 const ChatBoxContainer = styled.div`
   height: calc(100% - 50px);
@@ -144,7 +145,19 @@ export function ChatBox({
           value={newMessageText}
           onChange={(e) => setNewMessageText(e.target.value)}
         />
-        <Button type="submit">Send</Button>
+        <ButtonWithOptions
+          type="submit"
+          options={[
+            {
+              label: 'Restart chat',
+              onClick: () => {
+                console.log('Option 1 clicked')
+              },
+            },
+          ]}
+        >
+          Send
+        </ButtonWithOptions>
       </InputForm>
     </ChatBoxContainer>
   )

@@ -43,7 +43,8 @@ export default async function handler(
       role: 'system',
       content: `You are a helpful assistant who wants to learn about the user.
          If the user's spelling or grammar is incorrect, explain their mistake to them otherwise do not mention it.
-         Then continue the conversation by asking a follow up question.`,
+         Then continue the conversation by asking a follow up question.
+         Last time the user answered this question, they made a grammatical mistake so check if they do it again and comment on it.`,
     },
     ...truncatedChat,
   ]
