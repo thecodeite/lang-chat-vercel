@@ -30,8 +30,6 @@ export function NewChatPage() {
     })
       .then((res) => res.json())
       .then((data) => {
-        alert(JSON.stringify(data))
-        alert(data.chat.id)
         navTo('Chat', data.chat.id)
       })
       .finally(() => {

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useEffect, useState } from 'react'
 import React from 'react'
 
-import { ChatHistory, useChat } from './useChat'
+import { ChatRole, useChat } from './useChat'
 import { ButtonWithOptions } from '../../components/atoms/button-with-options/ButtonWithOptions'
 
 const ChatBoxContainer = styled.div`
@@ -12,6 +12,8 @@ const ChatBoxContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  max-width: 600px;
+  margin: 0 auto;
 `
 
 const ChatArea = styled.div`
@@ -32,26 +34,50 @@ const ChatMessages = styled.div`
   flex-direction: column;
 `
 
-const ChatMessage = styled.div`
+interface ChatStyle {
+  color: Record<ChatRole, string>
+  backgroundColor: Record<ChatRole, string>
+  pos: Record<ChatRole, 'left' | 'center' | 'right'>
+}
+
+const c: ChatStyle = {
+  color: {
+    assistant: 'white',
+    user: 'black',
+    system: 'black',
+  },
+  backgroundColor: {
+    assistant: '#4a575b',
+    user: '#3367f9',
+    system: '#ffffff',
+  },
+  pos: {
+    assistant: 'left',
+    user: 'right',
+    system: 'center',
+  },
+}
+
+const ChatMessage = styled.div<{ $role: ChatRole }>`
   padding: 4px 8px;
   border-radius: 10px;
   margin-bottom: 10px;
   text-align: left;
   font-size: 1.5em;
-`
 
-const ChatMessageSent = styled(ChatMessage)`
-  background-color: #4a575b;
-  justify-content: flex-start;
-  margin-inline-end: 15%;
-`
+  color: ${(props) => c.color[props.$role]};
+  background-color: ${(props) => c.backgroundColor[props.$role]};
+  justify-content: ${(props) => {
+    const pos = c.pos[props.$role]
+    if (pos === 'center') return 'center'
+    if (pos === 'left') return 'flex-start'
+    return 'flex-end'
+  }};
 
-const ChatMessageReceived = styled(ChatMessage)`
-  background-color: #3367f9;
-  color: white;
-  justify-content: flex-end;
-  margin-inline-start: 15%;
-  text-align: left;
+  margin-inline-start: ${(props) =>
+    c.pos[props.$role] === 'left' ? '15%' : '0'};
+  margin-inline-end: ${(props) =>
+    c.pos[props.$role] === 'right' ? '15%' : '0'};
 `
 
 const UnderChat = styled.div`
@@ -61,10 +87,13 @@ const UnderChat = styled.div`
 const InputForm = styled.form`
   display: flex;
   width: 100%;
+  max-width: 600px;
   padding: 10px;
   position: fixed;
   bottom: 0;
   background-color: #ffffff10;
+  backdrop-filter: blur(10px);
+  border-radius: 5px;
 `
 
 const Input = styled.input`
@@ -76,22 +105,17 @@ const Input = styled.input`
   font-size: 16px;
 `
 
-const Button = styled.button`
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  background-color: var(--accent-bg-color);
-  color: var(--main-fg-color);
-`
+// const Button = styled.button`
+//   padding: 10px;
+//   border-radius: 10px;
+//   border: none;
+//   background-color: var(--accent-bg-color);
+//   color: var(--main-fg-color);
+// `
 
-export function ChatBox({
-  chatId,
-  init,
-}: {
-  chatId: string
-  init: ChatHistory[]
-}) {
-  const [messages, sendMessage, messagePending] = useChat(chatId, init)
+export function ChatBox({ chatId }: { chatId: string }) {
+  const [messages, sendMessage, messagePending, isReady, restart] =
+    useChat(chatId)
   const [newMessageText, setNewMessageText] = useState('')
   const scrollRef = React.useRef<HTMLDivElement>(null)
 
@@ -103,10 +127,20 @@ export function ChatBox({
     }
   }, [messages])
 
-  const handleSend = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSend = async (e: React.FormEvent<HTMLFormElement>) => {
+    if (!isReady) return
+
     e.preventDefault()
-    sendMessage(newMessageText)
     setNewMessageText('')
+    const success = await sendMessage(newMessageText)
+    if (!success) {
+      setNewMessageText(newMessageText)
+    }
+  }
+
+  const restartChat = async () => {
+    if (!isReady) return
+    restart()
   }
 
   return (
@@ -114,28 +148,21 @@ export function ChatBox({
       <ChatArea>
         <ChatPad></ChatPad>
         <ChatMessages>
-          {messages.map((message) => {
-            if (message.role === 'assistant') {
-              return (
-                <ChatMessageSent key={message.content}>
-                  {message.content}
-                </ChatMessageSent>
-              )
-            } else if (message.role === 'user') {
-              return (
-                <ChatMessageReceived key={message.content}>
-                  {message.content}
-                </ChatMessageReceived>
-              )
-            } else {
-              return null
-            }
-          })}
+          {messages.map((message) => (
+            <ChatMessage key={message.content} $role={message.role}>
+              {message.content}
+            </ChatMessage>
+          ))}
           {messagePending && (
-            <ChatMessageSent>
+            <ChatMessage $role="assistant">
               <Dots />
-            </ChatMessageSent>
+            </ChatMessage>
           )}
+          {/* {!isReady && (
+            <ChatMessage $role="system">
+              Just checking cache <Dots />
+            </ChatMessage>
+          )} */}
         </ChatMessages>
         <UnderChat />
       </ChatArea>
@@ -146,17 +173,18 @@ export function ChatBox({
           onChange={(e) => setNewMessageText(e.target.value)}
         />
         <ButtonWithOptions
+          disabled={!isReady}
           type="submit"
           options={[
             {
               label: 'Restart chat',
               onClick: () => {
-                console.log('Option 1 clicked')
+                restartChat()
               },
             },
           ]}
         >
-          Send
+          {isReady ? 'Send' : '-Send-'}
         </ButtonWithOptions>
       </InputForm>
     </ChatBoxContainer>
@@ -172,11 +200,11 @@ function Dots() {
     return () => clearInterval(interval)
   }, [])
   return (
-    <div>
+    <span>
       {' '}
       {Array.from({ length: dots }).map((_, i) => (
         <span key={i}>.</span>
       ))}
-    </div>
+    </span>
   )
 }

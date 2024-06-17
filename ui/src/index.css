@@ -19,6 +19,7 @@
   --main-border-color: hwb(240 54% 73%);
   --link-fg-color: hsl(240, 100%, 67%);
   --shadow-color: rgba(255,255,255, 0.2);
+  
 
   color: var(--main-fg-color);
   background-color: var(--main-bg-color);

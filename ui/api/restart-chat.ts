@@ -6,7 +6,7 @@ import '../api-lib/init.js'
 
 export default async function handler(
   request: VercelRequest,
-  response: VercelResponse
+  response: VercelResponse,
 ) {
   const session = await Session.getSession(request, response)
   const userId = session.getUserId()
@@ -28,14 +28,10 @@ export default async function handler(
     UPDATE chats
     SET chat = ${JSON.stringify(newChat)}
     WHERE owner = ${userId} AND id = ${chatId};
-`
+  `
 
-  const r =
-    await sql`SELECT * FROM chats WHERE owner = ${userId} AND id = ${chatId};`
+  // const r =
+  //   await sql`SELECT * FROM chats WHERE owner = ${userId} AND id = ${chatId};`
 
-  if (r.rows.length === 0) {
-    return response.status(404).json({ message: 'Chat not found' })
-  } else {
-    return response.status(200).json(result.rows[0])
-  }
+  return response.status(200).send('Chat restarted')
 }

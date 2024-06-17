@@ -81,7 +81,7 @@ export function ButtonWithOptions({
   return (
     <ButtonContainer>
       <ButtonMain {...rest}>{children}</ButtonMain>
-      <ButtonOptions onClick={() => setOptionsOpen((b) => !b)}>
+      <ButtonOptions type="button" onClick={() => setOptionsOpen((b) => !b)}>
         {optionsOpen ? '▲' : '▼'}
       </ButtonOptions>
       {optionsOpen && (

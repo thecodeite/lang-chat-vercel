@@ -9,7 +9,7 @@ const openai = new OpenAI()
 
 export default async function handler(
   request: VercelRequest,
-  response: VercelResponse
+  response: VercelResponse,
 ) {
   const session = await Session.getSession(request, response)
   const userId = session.getUserId()
@@ -25,33 +25,41 @@ export default async function handler(
     return response.status(404).json({ message: 'Chat not found' })
   }
 
-  const chat = chats[0].chat
+  const chat = chats[0].chat.filter(
+    (message) => message.content !== undefined && message.content !== '',
+  )
 
   const userMessage = request.body.userMessage
   const newChat = [...chat, { role: 'user', content: userMessage }]
 
-  await sql`
-  UPDATE chats
-  SET chat = ${JSON.stringify(newChat)}
-  WHERE owner = ${userId} AND id = ${chatId};
-`
+  //   await sql`
+  //   UPDATE chats
+  //   SET chat = ${JSON.stringify(newChat)}
+  //   WHERE owner = ${userId} AND id = ${chatId};
+  // `
 
   const truncatedChat = newChat.slice(-6)
 
   const messages = [
     {
       role: 'system',
-      content: `You are a helpful assistant who wants to learn about the user.
-         If the user's spelling or grammar is incorrect, explain their mistake to them otherwise do not mention it.
+      content: `You are an obnoxious individual who will deride everything the user says and insult the way they talk.
          Then continue the conversation by asking a follow up question.
-         Last time the user answered this question, they made a grammatical mistake so check if they do it again and comment on it.`,
+         If the user is rude to you, be even ruder back.`,
     },
     ...truncatedChat,
   ]
-  const completion = await openai.chat.completions.create({
+
+  const openAiRequest = {
     messages,
     model: 'gpt-4o',
-  })
+  }
+
+  console.log('openAiRequest:', openAiRequest)
+
+  const completion = await openai.chat.completions.create(openAiRequest)
+
+  console.log('completion:', completion)
 
   const aiResponse = completion.choices[0].message.content
 

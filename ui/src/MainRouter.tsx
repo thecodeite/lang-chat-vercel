@@ -12,8 +12,6 @@ import { NewChatPage } from './pages/new-chat/NewChatPage'
 
 const AppRoot = styled.div`
   height: 100%;
-  /* display: flex; */
-  /* flex-direction: column; */
 `
 
 export function MainRouter() {
@@ -25,7 +23,7 @@ export function MainRouter() {
   }, [])
 
   if (loggedIn === null) {
-    return <div>Loading...</div>
+    return <div>Loading session...</div>
   }
 
   if (!loggedIn) {
