@@ -1,20 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocalCache } from '../../hooks/useLocalCache'
-import { getChat, restartChat } from '../../helpers/api-client'
-
-export type ChatRole = 'assistant' | 'user' | 'system'
-interface ChatHistory {
-  role: ChatRole
-  content: string
-}
-
-interface ChatRecord {
-  id: string
-  owner: string
-  created: string
-  summary: string
-  chat: ChatHistory[]
-}
+import {
+  ChatHistory,
+  ChatRecord,
+  ChatRole,
+  getChat,
+  restartChat,
+} from '../../helpers/api-client'
 
 function isChatRecord(arg: unknown): arg is ChatRecord {
   const a = arg as ChatRecord

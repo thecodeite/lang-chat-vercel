@@ -1,4 +1,19 @@
-const requests: Record<string, Promise<unknown>> = {}
+export interface ChatRecord {
+  id: string
+  owner: string
+  created: string
+  summary: string
+  chat: ChatHistory[]
+}
+
+export interface ChatHistory {
+  role: ChatRole
+  content: string
+}
+
+export type ChatRole = 'assistant' | 'user' | 'system'
+
+const requests: Record<string, Promise<ChatRecord>> = {}
 
 export function getChat(chatId: string, requestId: string) {
   const key = `${requestId}-${chatId}`
