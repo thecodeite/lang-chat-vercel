@@ -1,4 +1,4 @@
-const requests: Record<string, Promise<any>> = {}
+const requests: Record<string, Promise<unknown>> = {}
 
 export function getChat(chatId: string, requestId: string) {
   const key = `${requestId}-${chatId}`

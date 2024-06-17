@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-type IsT<T> = (value: any) => value is T
+type IsT<T> = (value: unknown) => value is T
 
 interface CacheWrapper<T> {
   value: T
