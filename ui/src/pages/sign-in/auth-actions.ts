@@ -80,8 +80,8 @@ export async function signUpClicked(email: string, password: string) {
     } else {
       // sign up successful. The session tokens are automatically handled by
       // the frontend SDK.
-      //window.location.href = '/homepage'
-      window.alert('Success')
+      window.location.href = `/?r=${Math.random()}`
+      //window.alert('Success')
     }
   } catch (err: unknown) {
     if (isSuperTokensGeneralError(err)) {
@@ -99,7 +99,7 @@ interface SuperTokensGeneralError {
 }
 
 function isSuperTokensGeneralError(
-  err: unknown
+  err: unknown,
 ): err is SuperTokensGeneralError {
   if (err === null || typeof err !== 'object') {
     return false
