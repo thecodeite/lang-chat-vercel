@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import { useEffect, useState } from 'react'
 import React from 'react'
 
-import { ChatRole, useChat } from './useChat'
+import { useChat } from './useChat'
 import { ButtonWithOptions } from '../../components/atoms/button-with-options/ButtonWithOptions'
+import { ChatRole } from '../../helpers/api-client'
 
 const ChatBoxContainer = styled.div`
   height: calc(100% - 50px);
