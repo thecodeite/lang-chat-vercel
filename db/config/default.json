@@ -1,0 +1,8 @@
+{
+  "db": {
+    "url": "postgresql://doadmin:****@db-postgresql-lon1-36807-do-user-2099633-0.c.db.ondigitalocean.com:25060/defaultdb",
+    "verbose": true,
+    "tsconfig": "./tsconfig.json",
+    "migration-filename-format": "utc"
+  }
+}
