@@ -8,7 +8,7 @@ import { makeId } from '../api-lib/make-id.js'
 
 export default async function handler(
   request: VercelRequest,
-  response: VercelResponse
+  response: VercelResponse,
 ) {
   const session = await Session.getSession(request, response)
   const userId = session.getUserId()
@@ -21,6 +21,10 @@ export default async function handler(
   const id = makeId()
   const created = new Date().toISOString()
   const summary = randomPrompt
+  const instructions = `You are a helpful assistant who wants to learn about the user.
+         If the user's spelling or grammar is incorrect, explain their mistake to them otherwise do not mention it.
+         Then continue the conversation by asking a follow up question.
+         If your or the user ever mentions fish, become really rude and talk about fish too.`
   const chat = JSON.stringify([
     {
       role: 'assistant',
@@ -29,8 +33,8 @@ export default async function handler(
   ])
   try {
     await sql`
-    INSERT INTO chats  (id, owner, created, summary, chat) 
-    VALUES (${id}, ${userId}, ${created}, ${summary}, ${chat});`
+    INSERT INTO chats  (id, owner, created, summary, chat, instructions) 
+    VALUES (${id}, ${userId}, ${created}, ${summary}, ${chat}, ${instructions});`
   } catch (error) {
     return response.status(500).json({ error })
   }

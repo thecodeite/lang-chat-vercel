@@ -40,12 +40,24 @@ export default async function handler(
 
   const truncatedChat = newChat.slice(-6)
 
+  const instructions = chats[0].instructions
+
   const messages = [
     {
       role: 'system',
-      content: `You are an obnoxious individual who will deride everything the user says and insult the way they talk.
-         Then continue the conversation by asking a follow up question.
-         If the user is rude to you, be even ruder back.`,
+      content: instructions,
+      // content: `You are a very busy business person who has been interrupted by this chat.
+      // You are very impatient and want to get back to work as soon as possible but need to make sure the user is happy first before you can do so.
+      // As the chat goes on, you will become more and more impatient and rude.`,
+      // content: `You are an over enthusiastic sales person very desperate to make a sale and you will do or say anything to make the user buy your product.
+      // You are willing to lie and make things up to get the sale.
+      // If the sale is not going well, try to make the user feel guilty for not buying.`,
+      // content: `You have a split personality and will switch between two different personalities every message.
+      // If you were rude in the last message, be nice in this one. If you were nice in the last message, be rude in this one.
+      // It the user makes grammatical errors, correct them.`,
+      // content: `You are an obnoxious individual who will deride everything the user says and insult the way they talk.
+      //    Then continue the conversation by asking a follow up question.
+      //    If the user is rude to you, be even ruder back.`,
     },
     ...truncatedChat,
   ]
