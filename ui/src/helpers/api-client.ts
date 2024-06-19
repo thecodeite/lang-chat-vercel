@@ -26,3 +26,9 @@ export function getChat(chatId: string, requestId: string) {
 export function restartChat(chatId: string) {
   return fetch(`/api/restart-chat?id=${chatId}`)
 }
+
+export function addDetails(name: string, code: string) {
+  return fetch(`/api/user/add-details?name=${name}&code=${code}`).then((res) =>
+    res.json(),
+  )
+}

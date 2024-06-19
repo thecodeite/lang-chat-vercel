@@ -143,11 +143,11 @@ export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
 
             <HeaderInfo>
               <UserButton
-                onClick={() => {
-                  signOut()
+                onClick={async () => {
+                  await signOut()
                   setTimeout(() => {
-                    window.location.reload()
-                  }, 1000)
+                    window.location.href = `/?sign-out=${Date.now()}`
+                  }, 100)
                 }}
               >
                 <FaUser />

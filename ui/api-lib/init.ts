@@ -2,6 +2,7 @@ import Session from 'supertokens-node/recipe/session/index.js'
 import supertokens from 'supertokens-node'
 import EmailPassword from 'supertokens-node/recipe/emailpassword/index.js'
 import EmailVerification from 'supertokens-node/recipe/emailverification/index.js'
+import UserRoles from 'supertokens-node/recipe/userroles/index.js'
 import Dashboard from 'supertokens-node/recipe/dashboard/index.js'
 
 const apiDomain =
@@ -32,5 +33,17 @@ supertokens.init({
     EmailPassword.init(),
     Session.init(),
     Dashboard.init(),
+    UserRoles.init(),
   ],
 })
+
+// Dashboard creds:
+// email: admin@plews.org
+// password: P@55word
+/*
+  curl --location --request POST 'https://st-dev-18878400-2368-11ef-bbe4-57221fbfba8b.aws.supertokens.io/recipe/dashboard/user' \
+--header 'rid: dashboard' \
+--header 'api-key: *****' \
+--header 'Content-Type: application/json' \
+--data-raw '{"email": "admin@plews.org","password": "*****"}'
+*/
