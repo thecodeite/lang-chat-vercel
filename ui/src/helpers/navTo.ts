@@ -5,6 +5,7 @@ export const knownPages = {
   NewChat: '/page/new-chat',
   ListChats: '/page/list-chats',
   SignUp: '/page/sign-up',
+  Account: '/page/account',
   Chat: (...args: string[]) => `/page/chat/${args[0]}`,
 }
 

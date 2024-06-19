@@ -1,4 +1,4 @@
-import { FormFieldProblem } from './auth-actions'
+import { FormFieldProblem } from '../auth-actions'
 
 export function InputErrorArea({
   name,

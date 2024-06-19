@@ -70,6 +70,30 @@ const HeaderItems = styled.div<{ $show: boolean }>`
     position: absolute;
     top: calc(4rem + 16px);
     left: 8px;
+    right: 80px;
+    flex-direction: column;
+    background-color: var(--accent-bg-color);
+    border-radius: 8px;
+    padding: 0px 8px;
+    border: 1px solid var(--main-border-color);
+  }
+
+  @media (min-width: 768px) {
+    display: flex;
+    align-items: center;
+  }
+`
+
+const Middle = styled.div`
+  flex-grow: 1;
+`
+
+const UserItems = styled.div<{ $show: boolean }>`
+  @media (max-width: 767px) {
+    display: ${(p) => (p.$show ? 'flex' : 'none')};
+    position: absolute;
+    top: calc(4rem + 16px);
+    left: 80px;
     right: 8px;
     flex-direction: column;
     background-color: var(--accent-bg-color);
@@ -80,6 +104,7 @@ const HeaderItems = styled.div<{ $show: boolean }>`
 
   @media (min-width: 768px) {
     display: flex;
+    align-items: center;
   }
 `
 
@@ -87,6 +112,7 @@ const HeaderItem = styled.div`
   @media (min-width: 768px) {
     padding: 4px;
     margin-left: 16px;
+    margin-right: 16px;
     cursor: pointer;
 
     &:hover {
@@ -99,10 +125,15 @@ const HeaderItem = styled.div`
 const HeaderInfo = styled.div`
   margin-left: auto;
   align-self: center;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
 `
 
 export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
-  const [showMenu, setShowMenu] = useState(false)
+  const [menu, setMenu] = useState<'none' | 'main' | 'user'>('none')
+
   const navTo = useNavTo()
 
   return (
@@ -110,14 +141,16 @@ export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
       <HeaderBarContainer>
         {signedIn && (
           <>
-            <MainMenuButton onClick={() => setShowMenu((x) => !x)}>
+            <MainMenuButton
+              onClick={() => setMenu((x) => (x === 'main' ? 'none' : 'main'))}
+            >
               <GiHamburgerMenu />
             </MainMenuButton>
 
-            <HeaderItems $show={showMenu}>
+            <HeaderItems $show={menu === 'main'}>
               <HeaderItem
                 onClick={() => {
-                  setShowMenu(false)
+                  setMenu('none')
                   navTo('Home')
                 }}
               >
@@ -125,7 +158,7 @@ export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
               </HeaderItem>
               <HeaderItem
                 onClick={() => {
-                  setShowMenu(false)
+                  setMenu('none')
                   navTo('NewChat')
                 }}
               >
@@ -133,22 +166,39 @@ export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
               </HeaderItem>
               <HeaderItem
                 onClick={() => {
-                  setShowMenu(false)
+                  setMenu('none')
                   navTo('ListChats')
                 }}
               >
                 Old Chats
               </HeaderItem>
             </HeaderItems>
+            <Middle />
 
-            <HeaderInfo>
-              <UserButton
+            <UserItems $show={menu === 'user'}>
+              <HeaderItem
+                onClick={() => {
+                  setMenu('none')
+                  navTo('Account')
+                }}
+              >
+                Account
+              </HeaderItem>
+              <HeaderItem
                 onClick={async () => {
                   await signOut()
                   setTimeout(() => {
                     window.location.href = `/?sign-out=${Date.now()}`
                   }, 100)
                 }}
+              >
+                Sign out
+              </HeaderItem>
+            </UserItems>
+
+            <HeaderInfo>
+              <UserButton
+                onClick={() => setMenu((x) => (x === 'user' ? 'none' : 'user'))}
               >
                 <FaUser />
               </UserButton>
