@@ -1,6 +1,9 @@
 {
   "cSpell.words": [
+    "emailpassword",
+    "emailverification",
     "openai",
-    "supertokens"
+    "supertokens",
+    "userroles"
   ]
 }
