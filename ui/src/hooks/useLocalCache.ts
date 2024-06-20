@@ -9,6 +9,19 @@ interface CacheWrapper<T> {
 
 let nextHookId = 0
 
+export function useLocalCacheString(
+  cacheKey: string,
+  defaultValue: string | null,
+  getter: () => Promise<string>,
+) {
+  return useLocalCache<string | null>(
+    (value): value is string => typeof value === 'string',
+    cacheKey,
+    defaultValue,
+    getter,
+  )
+}
+
 export function useLocalCache<T>(
   isT: IsT<T>,
   cacheKey: string,
@@ -50,7 +63,14 @@ export function useLocalCache<T>(
     getter().then(setCache)
   }, [])
 
-  return { ...state, setCache, updateCache, startInvalidating, reloadCache }
+  return {
+    ...state,
+    setCache,
+    updateCache,
+    startInvalidating,
+    reloadCache,
+    clearCache: startInvalidating,
+  }
 }
 
 function readLocalStorage<T>(isT: IsT<T>, cacheKey: string): T | null {

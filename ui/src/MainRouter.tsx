@@ -3,8 +3,6 @@ import styled from 'styled-components'
 import Session from 'supertokens-web-js/recipe/session'
 import { UserRoleClaim } from 'supertokens-web-js/recipe/userroles'
 
-import { useEffect, useState } from 'react'
-
 import { HeaderBar } from './components/header-bar/HeaderBar'
 import { HomePage } from './pages/home/HomePage'
 import { ChatPage } from './pages/chat/ChatPage'
@@ -13,6 +11,7 @@ import { SignPage } from './pages/sign/SignPage'
 import { NewChatPage } from './pages/new-chat/NewChatPage'
 import { ChatAdminPage } from './pages/chat-admin/ChatAdminPage'
 import { ChatAdminPageDetail } from './pages/chat-admin/ChatAdminPageDetail'
+import { useLocalCache } from './hooks/useLocalCache'
 
 const AppRoot = styled.div`
   height: 100%;
@@ -20,41 +19,39 @@ const AppRoot = styled.div`
 
 type SignedInState = 'no-session' | 'no-details' | 'signed-in'
 
-async function getSignedInState(): Promise<SignedInState> {
-  const hasSession = await Session.doesSessionExist()
-  if (!hasSession) {
-    return 'no-session'
-  }
-
-  const validationErrors = await Session.validateClaims({
-    overrideGlobalClaimValidators: (globalValidators) => [
-      ...globalValidators,
-      UserRoleClaim.validators.includes('hasDetails'),
-    ],
-  })
-
-  if (validationErrors.length > 0) {
-    return 'no-details'
-  }
-
-  // alert(JSON.stringify(validationErrors))
-
-  return 'signed-in'
-}
-
 export function MainRouter() {
-  const [loggedIn, setLoggedIn] = useState<SignedInState | null>(null)
-  useEffect(() => {
-    getSignedInState().then((state) => {
-      setLoggedIn(state)
-    })
-  }, [])
+  // Move this and isAdmin to a common hook
+  const { value: signedInState } = useLocalCache<SignedInState | null>(
+    (value): value is SignedInState =>
+      value === 'no-session' || value === 'no-details' || value === 'signed-in',
+    'signedInState',
+    null,
+    async () => {
+      const hasSession = await Session.doesSessionExist()
+      if (!hasSession) {
+        return 'no-session'
+      }
 
-  if (loggedIn === null) {
+      const validationErrors = await Session.validateClaims({
+        overrideGlobalClaimValidators: (globalValidators) => [
+          ...globalValidators,
+          UserRoleClaim.validators.includes('hasDetails'),
+        ],
+      })
+
+      if (validationErrors.length > 0) {
+        return 'no-details'
+      }
+
+      return 'signed-in'
+    },
+  )
+
+  if (signedInState === null) {
     return <div>Loading session...</div>
   }
 
-  if (loggedIn === 'no-session') {
+  if (signedInState === 'no-session') {
     return (
       <AppRoot>
         <BrowserRouter>
@@ -76,7 +73,7 @@ export function MainRouter() {
     )
   }
 
-  if (loggedIn === 'no-details') {
+  if (signedInState === 'no-details') {
     return (
       <AppRoot>
         <BrowserRouter>
@@ -110,6 +107,8 @@ export function MainRouter() {
           <Route path="/page/chat/:id" element={<ChatPage />} />
           <Route path="/page/list-chats" element={<ListChatsPage />} />
           <Route path="/page/chat-admin" element={<ChatAdminPage />} />
+          <Route path="/page/sign-up" element={<Navigate to="/" replace />} />
+          <Route path="/page/sign-in" element={<Navigate to="/" replace />} />
           <Route
             path="/page/chat-admin/:id"
             element={<ChatAdminPageDetail />}

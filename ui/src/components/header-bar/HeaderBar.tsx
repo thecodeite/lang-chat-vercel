@@ -5,6 +5,7 @@ import { GiHamburgerMenu } from 'react-icons/gi'
 import { FaUser } from 'react-icons/fa'
 import { useState } from 'react'
 import { useNavTo } from '../../helpers/navTo'
+import { useIsAdmin } from '../../hooks/useIsAdmin'
 
 const HeaderBarContainer = styled.header`
   position: fixed;
@@ -133,7 +134,7 @@ const HeaderInfo = styled.div`
 
 export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
   const [menu, setMenu] = useState<'none' | 'main' | 'user'>('none')
-
+  const isAdmin = useIsAdmin()
   const navTo = useNavTo()
 
   return (
@@ -172,6 +173,16 @@ export function HeaderBar({ signedIn }: { signedIn?: boolean }) {
               >
                 Old Chats
               </HeaderItem>
+              {isAdmin && (
+                <HeaderItem
+                  onClick={() => {
+                    setMenu('none')
+                    navTo('ChatAdmin')
+                  }}
+                >
+                  Admin
+                </HeaderItem>
+              )}
             </HeaderItems>
             <Middle />
 
