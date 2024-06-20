@@ -4,7 +4,7 @@ type IsT<T> = (value: unknown) => value is T
 
 interface CacheWrapper<T> {
   value: T
-  isReady: boolean
+  isFresh: boolean
 }
 
 let nextHookId = 0
@@ -33,14 +33,14 @@ export function useLocalCache<T>(
   const [state, setState] = useState<CacheWrapper<T>>(() => {
     const local = readLocalStorage(isT, cacheKey)
     if (local === null) {
-      return { value: defaultValue, isReady: false }
+      return { value: defaultValue, isFresh: false }
     } else {
-      return { value: local, isReady: false }
+      return { value: local, isFresh: false }
     }
   })
 
   const setCache = (newValue: T) => {
-    setState({ value: newValue, isReady: true })
+    setState({ value: newValue, isFresh: true })
     localStorage.setItem(cacheKey, JSON.stringify(newValue))
   }
 
@@ -51,7 +51,7 @@ export function useLocalCache<T>(
 
   const startInvalidating = () => {
     localStorage.removeItem(cacheKey)
-    setState({ value: defaultValue, isReady: false })
+    setState({ value: defaultValue, isFresh: false })
   }
 
   const reloadCache = () => {

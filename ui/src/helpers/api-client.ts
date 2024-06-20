@@ -1,3 +1,5 @@
+import { attemptRefreshingSession } from 'supertokens-web-js/recipe/session'
+
 export interface ChatRecord {
   id: string
   owner: string
@@ -9,6 +11,7 @@ export interface ChatRecord {
 export interface ChatHistory {
   role: ChatRole
   content: string
+  response?: string
 }
 
 export type ChatRole = 'teacher' | 'assistant' | 'user' | 'system'
@@ -79,11 +82,18 @@ export interface ChatGPTResponse {
 export async function sendChatGPT(
   chatId: string,
   userMessage: string,
+  refreshTried = false,
 ): Promise<ChatGPTResponse | null> {
   const res = await fetch(`/api/chat-gpt?id=${chatId}`, {
     method: 'POST',
     body: userMessage,
   })
+
+  if (res.status === 401 && !refreshTried) {
+    await attemptRefreshingSession()
+    return sendChatGPT(chatId, userMessage, true)
+  }
+
   if (!res.ok) {
     return null
   }

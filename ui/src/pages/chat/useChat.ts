@@ -39,10 +39,8 @@ export function useChat(chatId: string) {
   const hookId = nextHookId++
   const {
     value: cachedChat,
-    isReady,
-    updateCache,
-    startInvalidating,
-    reloadCache,
+    isFresh,
+    ...chatCache
   } = useLocalCache<ChatRecord>(
     isChatRecord,
     `chat.${chatId}`,
@@ -53,23 +51,29 @@ export function useChat(chatId: string) {
   const messageRef = useRef<ChatHistory[]>(cachedChat.chat)
   const [messages, setMessages] = useState<ChatHistory[]>(cachedChat.chat)
   const [messagePending, setMessagePending] = useState(false)
+  const wasFresh = useRef(false)
 
   useEffect(() => {
-    if (isReady) {
+    // run this only once when the chat transitions from stale to fresh
+    // running after that could overwrite new state
+    // TODO: Maybe refactor to return two values, one preliminary and one final?
+    if (wasFresh.current === false && isFresh) {
       messageRef.current = cachedChat.chat
       setMessages(cachedChat.chat)
+      wasFresh.current = true
     }
-  }, [isReady])
+  }, [isFresh, cachedChat.chat])
 
   const addMessage = (
     role: ChatRole,
     content: string,
     shouldUpdateCache?: boolean,
+    response?: string,
   ) => {
-    messageRef.current = [...messageRef.current, { role, content }]
+    messageRef.current = [...messageRef.current, { role, content, response }]
     setMessages(messageRef.current)
     if (shouldUpdateCache) {
-      updateCache((oldChat) => {
+      chatCache.updateCache((oldChat) => {
         return {
           ...oldChat,
           chat: messageRef.current,
@@ -101,6 +105,9 @@ export function useChat(chatId: string) {
 
     if (response !== null) {
       setMessagePending(false)
+      messageRef.current = snapshot
+      setMessages(messageRef.current)
+      addMessage('user', trimmedMessage, true, response.teacherResponse)
       addMessage('teacher', response.teacherResponse, true)
       addMessage('assistant', response.chatResponse, true)
       return true
@@ -114,10 +121,10 @@ export function useChat(chatId: string) {
   }
 
   const restart = async () => {
-    await startInvalidating()
+    await chatCache.startInvalidating()
     await restartChat(chatId)
-    await reloadCache()
+    await chatCache.reloadCache()
   }
 
-  return [messages, sendMessage, messagePending, isReady, restart] as const
+  return [messages, sendMessage, messagePending, isFresh, restart] as const
 }

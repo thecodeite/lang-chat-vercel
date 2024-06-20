@@ -15,21 +15,20 @@ export async function getUserId(
     if (SuperTokensError.isErrorFromSuperTokens(err)) {
       if (err.type === Session.Error.TRY_REFRESH_TOKEN) {
         if (doNotRefresh) {
-          res.status(401).json({ message: 'Unauthorized' })
-          throw new Error('Unauthorized')
+          res.status(401).json({ message: 'Tried to refresh but failed' })
+          return
         }
         await Session.refreshSession(req, res)
         return getUserId(req, res, true)
       } else if (err.type === Session.Error.UNAUTHORISED) {
         res.status(401).json({ message: 'Unauthorized' })
-        throw new Error('Unauthorized')
+        return
       } else if (err.type === Session.Error.INVALID_CLAIMS) {
-        // The user is missing some required claim.
-        // You can pass the missing claims to the frontend and handle it there. Send a 403 to the frontend.
+        res.status(401).json({ message: 'Invalid claims' })
+        return
       }
     } else {
       console.error(err)
     }
-    throw new Error('Internal Server Error')
   }
 }

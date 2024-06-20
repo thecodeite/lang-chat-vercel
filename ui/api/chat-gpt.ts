@@ -107,7 +107,8 @@ export default async function handler(
   const teacherResponse = completion2.choices[0].message.content
 
   const newChat2 = [
-    ...newChat,
+    ...chat,
+    { role: 'user', content: userMessage, response: teacherResponse },
     { role: 'teacher', content: teacherResponse },
     { role: 'assistant', content: chatResponse },
   ]

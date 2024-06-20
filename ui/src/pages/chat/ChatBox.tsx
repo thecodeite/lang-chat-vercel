@@ -1,6 +1,6 @@
 // import styled from 'styled-components/macro'
 import styled from 'styled-components'
-import { ReactNode, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import React from 'react'
 import {
   FaUser,
@@ -11,7 +11,7 @@ import {
 
 import { useChat } from './useChat'
 import { ButtonWithOptions } from '../../components/atoms/button-with-options/ButtonWithOptions'
-import { ChatRole } from '../../helpers/api-client'
+import { ChatHistory, ChatRole } from '../../helpers/api-client'
 
 const ChatBoxContainer = styled.div`
   height: calc(100% - 50px);
@@ -90,6 +90,38 @@ const ChatMessageWrapper = styled.div<{ $role: ChatRole }>`
     c.pos[props.$role] === 'right' ? '15%' : '0'};
 `
 
+const ChatMessageSplit = styled.div`
+  padding: 4px 8px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-align: left;
+  font-size: 1em;
+
+  justify-content: ${() => {
+    const pos = c.pos['user']
+    if (pos === 'center') return 'center'
+    if (pos === 'left') return 'flex-start'
+    return 'flex-end'
+  }};
+
+  margin-inline-start: ${c.pos['user'] === 'left' ? '15%' : '0'};
+  margin-inline-end: ${c.pos['user'] === 'right' ? '15%' : '0'};
+
+  div:first-of-type {
+    background-color: ${c.backgroundColor['user']};
+    color: ${c.color['user']};
+    border-radius: 10px 10px 0 0;
+    padding: 8px;
+  }
+
+  div:last-of-type {
+    background-color: ${c.backgroundColor['teacher']};
+    color: ${c.color['teacher']};
+    border-radius: 0 0 10px 10px;
+    padding: 8px;
+  }
+`
+
 const ChatMessageText = styled.span``
 
 const UnderChat = styled.div`
@@ -118,7 +150,7 @@ const Input = styled.input`
 `
 
 export function ChatBox({ chatId }: { chatId: string }) {
-  const [messages, sendMessage, messagePending, isReady, restart] =
+  const [messages, sendMessage, messagePending, isFresh, restart] =
     useChat(chatId)
   const [newMessageText, setNewMessageText] = useState('')
   const scrollRef = React.useRef<HTMLDivElement>(null)
@@ -132,7 +164,7 @@ export function ChatBox({ chatId }: { chatId: string }) {
   }, [messages])
 
   const handleSend = async (e: React.FormEvent<HTMLFormElement>) => {
-    if (!isReady) return
+    if (!isFresh) return
 
     e.preventDefault()
     setNewMessageText('')
@@ -143,7 +175,7 @@ export function ChatBox({ chatId }: { chatId: string }) {
   }
 
   const restartChat = async () => {
-    if (!isReady) return
+    if (!isFresh) return
     restart()
   }
 
@@ -152,21 +184,16 @@ export function ChatBox({ chatId }: { chatId: string }) {
       <ChatArea>
         <ChatPad></ChatPad>
         <ChatMessages>
-          {messages.map((message) => (
-            <ChatMessage key={message.content} $role={message.role}>
-              {message.content}
-            </ChatMessage>
-          ))}
+          {messages
+            .filter((m) => m.role !== 'teacher')
+            .map((message) => (
+              <ChatMessage key={message.content} message={message} />
+            ))}
           {messagePending && (
-            <ChatMessage $role="assistant">
+            <ChatMessageWrapper $role="assistant">
               <Dots />
-            </ChatMessage>
+            </ChatMessageWrapper>
           )}
-          {/* {!isReady && (
-            <ChatMessage $role="system">
-              Just checking cache <Dots />
-            </ChatMessage>
-          )} */}
         </ChatMessages>
         <UnderChat />
       </ChatArea>
@@ -177,7 +204,7 @@ export function ChatBox({ chatId }: { chatId: string }) {
           onChange={(e) => setNewMessageText(e.target.value)}
         />
         <ButtonWithOptions
-          disabled={!isReady}
+          disabled={!isFresh}
           type="submit"
           options={[
             {
@@ -188,27 +215,36 @@ export function ChatBox({ chatId }: { chatId: string }) {
             },
           ]}
         >
-          {isReady ? 'Send' : '-Send-'}
+          {isFresh ? 'Send' : 'Loading'}
         </ButtonWithOptions>
       </InputForm>
     </ChatBoxContainer>
   )
 }
 
-function ChatMessage({
-  children,
-  $role,
-}: {
-  children: ReactNode
-  $role: ChatRole
-}) {
+function ChatMessage({ message }: { message: ChatHistory }) {
+  const { role, content, response } = message
+
+  if (role === 'user' && response !== undefined) {
+    return (
+      <ChatMessageSplit>
+        <div>
+          <FaUser /> {content}
+        </div>
+        <div>
+          <FaBookReader /> {response}
+        </div>
+      </ChatMessageSplit>
+    )
+  }
+
   return (
-    <ChatMessageWrapper $role={$role}>
-      {$role === 'assistant' && <FaRobot />}
-      {$role === 'teacher' && <FaBookReader />}
-      {$role === 'user' && <FaUser />}
-      {$role === 'system' && <FaExclamationTriangle />}
-      <ChatMessageText> {children}</ChatMessageText>
+    <ChatMessageWrapper $role={role}>
+      {role === 'assistant' && <FaRobot />}
+      {role === 'teacher' && <FaBookReader />}
+      {role === 'user' && <FaUser />}
+      {role === 'system' && <FaExclamationTriangle />}
+      <ChatMessageText> {content}</ChatMessageText>
     </ChatMessageWrapper>
   )
 }
