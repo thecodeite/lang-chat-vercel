@@ -66,19 +66,11 @@ export default async function handler(
     ...truncatedChat,
   ]
 
-  const openAiRequest: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming =
+  const openAiRequest1: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming =
     {
       messages,
       model: 'gpt-4o',
     }
-
-  console.log('openAiRequest:', openAiRequest)
-
-  const completion = await openai.chat.completions.create(openAiRequest)
-
-  console.log('completion:', completion)
-
-  const chatResponse = completion.choices[0].message.content
 
   const teacherInstructions = `
   If the user makes no spelling or grammar mistakes, say "Ok" and do not respond further.
@@ -102,7 +94,14 @@ export default async function handler(
       model: 'gpt-4o',
     }
 
-  const completion2 = await openai.chat.completions.create(openAiRequest2)
+  const [completion1, completion2] = await Promise.all([
+    openai.chat.completions.create(openAiRequest1),
+    openai.chat.completions.create(openAiRequest2),
+  ])
+
+  console.log('completion1:', completion1)
+
+  const chatResponse = completion1.choices[0].message.content
 
   const teacherResponse = completion2.choices[0].message.content
 
