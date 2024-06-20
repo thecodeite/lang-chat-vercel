@@ -8,24 +8,31 @@
   font-weight: 400;
   font-size: 62.5%;
 
+  /* main colours */
+
+
   color-scheme: light dark;
+  --body-bg-color: hwb(0 14% 86%);
 
   --main-fg-color: hwb(0 100% 0% / 0.87);
-  --accent-fg-color: hsl(238, 14%, 38%);
+  --main-bg-color: hwb(240 24% 73%);
+  
   --disabled-fg-color: hwb(0 100% 0% / 0.47);
-  --main-bg-color: hwb(0 14% 86%);
-  --accent-bg-color: hwb(240 24% 73%);
   --disabled-bg-color: hwb(240 24% 83%);
   --main-border-color: hwb(240 54% 73%);
-  --link-fg-color: hsl(240, 100%, 67%);
   --shadow-color: rgba(255,255,255, 0.2);
   --color-error: red;
+  
   --primary-action-color: rgb(87, 87, 255);
   --primary-action-contrast: rgb(255, 246, 167);
   
+  --link-fg-color: var(--primary-action-color);
+  --secondary-action-color: var(--main-fg-color);
+  --secondary-action-contrast: var(--main-bg-color);
+  
 
   color: var(--main-fg-color);
-  background-color: var(--main-bg-color);
+  background-color: var(--body-bg-color);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -37,15 +44,19 @@
 
 @media (prefers-color-scheme: light) {
   :root {
+    --body-bg-color: rgb(226, 226, 226);
+
     --main-fg-color: #213547;
-    --main-bg-color: #ffffff;
+    --main-bg-color: #c7c7c8;
     --disabled-bg-color: hwb(0 100% 0% / 0.47);
-    --accent-bg-color: hwb(240 69% 22%);
-  --accent-fg-color: hwb(240 24% 73%);
-  --disabled-fg-color: hwb(240 24% 83%);
-  --main-border-color: hwb(0 21% 79%);
-  --link-fg-color: hsl(240, 71%, 41%);
-  --shadow-color: rgba(255,255,255, 0.2);
+
+    --disabled-fg-color: hwb(240 24% 83%);
+    --main-border-color: hwb(0 21% 79%);
+
+    --shadow-color: rgba(255,255,255, 0.2);
+
+    --primary-action-color: hsl(240, 71%, 41%);
+  --primary-action-contrast: rgb(255, 246, 167);
   }
 }
 
@@ -60,6 +71,7 @@ body {
   height: 100%;
   margin: 0;
   background-color: black;
+  font-size: 16px;
 }
 
 #root{
@@ -67,7 +79,7 @@ body {
   max-width: 1440px;
   margin: 0 auto;
   color: var(--main-fg-color);
-  background-color: var(--main-bg-color);
+  background-color: var(--body-bg-color);
   background-image: url('/logo.svg');
   background-repeat: no-repeat;
   background-position-x: center;

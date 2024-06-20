@@ -21,7 +21,7 @@ const Box = styled.div`
   margin: 32px 16px;
   flex-direction: column;
   padding: 20px;
-  background-color: var(--accent-bg-color);
+  background-color: var(--main-bg-color);
   border-radius: 8px;
   border: 1px solid var(--main-border-color);
   max-width: 500px;

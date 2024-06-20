@@ -38,8 +38,8 @@ export const SignInButton = styled.button`
   padding: 10px;
   border-radius: 10px;
   border: none;
-  background-color: var(--accent-fg-color);
-  color: var(--main-fg-color);
+  background-color: var(--primary-action-color);
+  color: var(--primary-action-contrast);
   cursor: pointer;
 `
 export const HeaderTabInactive = styled.button`

@@ -8,7 +8,7 @@ const WelcomeText = styled.p`
   margin: 32px auto;
   padding: 0;
   color: var(--main-fg-color);
-  background-color: var(--accent-bg-color);
+  background-color: var(--main-bg-color);
   text-align: center;
 `
 

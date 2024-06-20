@@ -13,7 +13,7 @@ const HeaderBarContainer = styled.header`
   right: 0;
   display: flex;
   padding: 4px;
-  background-color: var(--accent-bg-color);
+  background-color: var(--main-bg-color);
   background-image: url('/logo.svg');
   background-repeat: no-repeat;
   background-position-x: center;
@@ -28,11 +28,15 @@ const SpaceUnderBar = styled.div`
   height: 5rem;
 `
 
-const MainMenuButton = styled.button`
-  display: block;
-  color: var(--main-fg-color);
-  background-color: var(--accent-fg-color);
+const ButtonBase = styled.button`
+  background-color: var(--secondary-action-color);
+  color: var(--secondary-action-contrast);
   border: 1px solid var(--main-border-color);
+  cursor: pointer;
+`
+
+const MainMenuButton = styled(ButtonBase)`
+  display: block;
 
   width: 4rem;
   height: 4rem;
@@ -46,18 +50,14 @@ const MainMenuButton = styled.button`
   }
 `
 
-const UserButton = styled.button`
+const UserButton = styled(ButtonBase)`
   display: block;
 
   width: 4rem;
   height: 4rem;
 
   border-radius: 50%;
-  color: var(--main-fg-color);
-  background-color: var(--accent-fg-color);
-  border: 1px solid var(--main-border-color);
 
-  cursor: pointer;
   svg {
     width: 80%;
     height: 80%;
@@ -72,7 +72,7 @@ const HeaderItems = styled.div<{ $show: boolean }>`
     left: 8px;
     right: 80px;
     flex-direction: column;
-    background-color: var(--accent-bg-color);
+    background-color: var(--main-bg-color);
     border-radius: 8px;
     padding: 0px 8px;
     border: 1px solid var(--main-border-color);
@@ -96,7 +96,7 @@ const UserItems = styled.div<{ $show: boolean }>`
     left: 80px;
     right: 8px;
     flex-direction: column;
-    background-color: var(--accent-bg-color);
+    background-color: var(--main-bg-color);
     border-radius: 8px;
     padding: 0px 8px;
     border: 1px solid var(--main-border-color);
@@ -116,7 +116,7 @@ const HeaderItem = styled.div`
     cursor: pointer;
 
     &:hover {
-      background-color: var(--accent-fg-color);
+      background-color: var(--main-bg-color);
       color: var(--main-fg-color);
     }
   }

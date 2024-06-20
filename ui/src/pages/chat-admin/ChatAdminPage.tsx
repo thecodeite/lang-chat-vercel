@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AllChatList, fetchAllChats } from '../../helpers/api-client'
 import styled from 'styled-components'
 import { useNavTo } from '../../helpers/navTo'
@@ -20,7 +20,8 @@ const AdminTable = styled.table`
   tr {
     &:hover {
       td {
-        background-color: var(--accent-bg-color);
+        background-color: var(--primary-action-color);
+        color: var(--primary-action-contrast);
       }
     }
   }

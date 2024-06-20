@@ -11,7 +11,7 @@ const ButtonContainer = styled.div`
 
 const RandomChatButton = styled.button`
   color: var(--main-fg-color);
-  background-color: var(--accent-bg-color);
+  background-color: var(--main-bg-color);
   border: none;
   border-radius: 4px;
 

@@ -1,7 +1,8 @@
 // import styled from 'styled-components/macro'
 import styled from 'styled-components'
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import React from 'react'
+import { FaUser, FaRobot, FaExclamationTriangle } from 'react-icons/fa'
 
 import { useChat } from './useChat'
 import { ButtonWithOptions } from '../../components/atoms/button-with-options/ButtonWithOptions'
@@ -59,12 +60,12 @@ const c: ChatStyle = {
   },
 }
 
-const ChatMessage = styled.div<{ $role: ChatRole }>`
+const ChatMessageWrapper = styled.div<{ $role: ChatRole }>`
   padding: 4px 8px;
   border-radius: 10px;
   margin-bottom: 10px;
   text-align: left;
-  font-size: 1.5em;
+  font-size: 1em;
 
   color: ${(props) => c.color[props.$role]};
   background-color: ${(props) => c.backgroundColor[props.$role]};
@@ -80,6 +81,8 @@ const ChatMessage = styled.div<{ $role: ChatRole }>`
   margin-inline-end: ${(props) =>
     c.pos[props.$role] === 'right' ? '15%' : '0'};
 `
+
+const ChatMessageText = styled.span``
 
 const UnderChat = styled.div`
   height: 44px;
@@ -105,14 +108,6 @@ const Input = styled.input`
   margin-right: 10px;
   font-size: 16px;
 `
-
-// const Button = styled.button`
-//   padding: 10px;
-//   border-radius: 10px;
-//   border: none;
-//   background-color: var(--accent-bg-color);
-//   color: var(--main-fg-color);
-// `
 
 export function ChatBox({ chatId }: { chatId: string }) {
   const [messages, sendMessage, messagePending, isReady, restart] =
@@ -189,6 +184,23 @@ export function ChatBox({ chatId }: { chatId: string }) {
         </ButtonWithOptions>
       </InputForm>
     </ChatBoxContainer>
+  )
+}
+
+function ChatMessage({
+  children,
+  $role,
+}: {
+  children: ReactNode
+  $role: ChatRole
+}) {
+  return (
+    <ChatMessageWrapper $role={$role}>
+      {$role === 'assistant' && <FaRobot />}
+      {$role === 'user' && <FaUser />}
+      {$role === 'system' && <FaExclamationTriangle />}
+      <ChatMessageText> {children}</ChatMessageText>
+    </ChatMessageWrapper>
   )
 }
 

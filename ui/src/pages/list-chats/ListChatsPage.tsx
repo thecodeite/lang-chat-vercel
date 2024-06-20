@@ -29,7 +29,7 @@ const ChatItem = styled.li`
 
 const ChatButton = styled.button`
   color: var(--main-fg-color);
-  background-color: var(--accent-bg-color);
+  background-color: var(--main-bg-color);
   border: none;
   border-radius: 10px;
   text-align: left;

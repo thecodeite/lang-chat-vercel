@@ -22,10 +22,6 @@ const Input = styled.input`
   margin-right: 16px;
 `
 
-const Section = styled.p`
-  font-size: 16px;
-`
-
 const EditableAreaLabel = styled.label`
   font-size: 16px;
 `
@@ -75,7 +71,6 @@ export function ChatAdminPageDetail() {
             control="input"
           />
 
-          <Section>Instructions:</Section>
           <EditableArea
             label="Instructions"
             value={chat.instructions}

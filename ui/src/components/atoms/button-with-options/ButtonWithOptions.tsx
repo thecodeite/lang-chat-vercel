@@ -20,8 +20,8 @@ const ButtonBase = styled.button`
   color: white;
   font-size: 1em;
 
-  background-color: var(--accent-bg-color);
-  color: var(--main-fg-color);
+  background-color: var(--primary-action-color);
+  color: var(--primary-action-contrast);
   padding: 10px;
   cursor: pointer;
 `
@@ -60,7 +60,7 @@ const OptionItem = styled.button`
   border-radius: 5px;
 
   &:hover {
-    background-color: var(--accent-bg-color);
+    background-color: var(--primary-action-color);
     color: var(--main-fg-color);
   }
 `
