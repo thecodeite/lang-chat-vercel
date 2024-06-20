@@ -82,7 +82,7 @@ const ChatMessage = styled.div<{ $role: ChatRole }>`
 `
 
 const UnderChat = styled.div`
-  height: 40px;
+  height: 44px;
 `
 
 const InputForm = styled.form`

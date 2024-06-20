@@ -32,3 +32,41 @@ export function addDetails(name: string, code: string) {
     res.json(),
   )
 }
+
+export interface AllChatList {
+  id: string
+  owner: string
+  created: string
+  summary: string
+  instructions: string
+  name: string
+}
+
+export function fetchAllChats(): Promise<AllChatList[]> {
+  return fetch('/api/chat-admin').then((res) => res.json())
+}
+
+export interface SingleChat {
+  id: string
+  owner: string
+  created: string
+  summary: string
+  chat: ChatHistory[]
+  instructions: string
+  name: string
+}
+
+export function fetchSingleChat(id: string): Promise<SingleChat> {
+  return fetch(`/api/chat-admin-single?id=${id}`).then((res) => res.json())
+}
+
+export function putSingleChatProperty(
+  id: string,
+  field: 'summary' | 'instructions',
+  value: string,
+) {
+  return fetch(`/api/chat-admin-write?id=${id}&field=${field}`, {
+    method: 'POST',
+    body: value,
+  })
+}

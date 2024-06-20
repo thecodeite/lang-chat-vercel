@@ -11,6 +11,8 @@ import { ChatPage } from './pages/chat/ChatPage'
 import { ListChatsPage } from './pages/list-chats/ListChatsPage'
 import { SignPage } from './pages/sign/SignPage'
 import { NewChatPage } from './pages/new-chat/NewChatPage'
+import { ChatAdminPage } from './pages/chat-admin/ChatAdminPage'
+import { ChatAdminPageDetail } from './pages/chat-admin/ChatAdminPageDetail'
 
 const AppRoot = styled.div`
   height: 100%;
@@ -107,6 +109,11 @@ export function MainRouter() {
           <Route path="/page/new-chat" element={<NewChatPage />} />
           <Route path="/page/chat/:id" element={<ChatPage />} />
           <Route path="/page/list-chats" element={<ListChatsPage />} />
+          <Route path="/page/chat-admin" element={<ChatAdminPage />} />
+          <Route
+            path="/page/chat-admin/:id"
+            element={<ChatAdminPageDetail />}
+          />
           <Route path="*" element={<div>404</div>} />
         </Routes>
       </BrowserRouter>

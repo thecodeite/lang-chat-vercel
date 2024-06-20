@@ -7,6 +7,8 @@ export const knownPages = {
   SignUp: '/page/sign-up',
   Account: '/page/account',
   Chat: (...args: string[]) => `/page/chat/${args[0]}`,
+  ChatAdmin: '/page/chat-admin',
+  ChatAdminDetail: (...args: string[]) => `/page/chat-admin/${args[0]}`,
 }
 
 export function useNavTo() {

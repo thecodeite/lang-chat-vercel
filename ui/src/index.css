@@ -20,6 +20,8 @@
   --link-fg-color: hsl(240, 100%, 67%);
   --shadow-color: rgba(255,255,255, 0.2);
   --color-error: red;
+  --primary-action-color: rgb(87, 87, 255);
+  --primary-action-contrast: rgb(255, 246, 167);
   
 
   color: var(--main-fg-color);
