@@ -110,6 +110,10 @@ export function MainRouter() {
           <Route path="/page/sign-up" element={<Navigate to="/" replace />} />
           <Route path="/page/sign-in" element={<Navigate to="/" replace />} />
           <Route
+            path="/page/add-details"
+            element={<Navigate to="/" replace />}
+          />
+          <Route
             path="/page/chat-admin/:id"
             element={<ChatAdminPageDetail />}
           />

