@@ -6,6 +6,7 @@ import {
   ChatRole,
   getChat,
   restartChat,
+  sendChatGPT,
 } from '../../helpers/api-client'
 
 function isChatRecord(arg: unknown): arg is ChatRecord {
@@ -88,18 +89,20 @@ export function useChat(chatId: string) {
     addMessage('user', trimmedMessage)
     setMessagePending(true)
 
-    const res = await fetch(`/api/chat-gpt?id=${chatId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ userMessage: trimmedMessage }),
-    })
+    // const res = await fetch(`/api/chat-gpt?id=${chatId}`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({ userMessage: trimmedMessage }),
+    // })
 
-    if (res.ok) {
-      const body = await res.text()
+    const response = await sendChatGPT(chatId, trimmedMessage)
+
+    if (response !== null) {
       setMessagePending(false)
-      addMessage('assistant', body, true)
+      addMessage('teacher', response.teacherResponse, true)
+      addMessage('assistant', response.chatResponse, true)
       return true
     } else {
       setMessagePending(false)

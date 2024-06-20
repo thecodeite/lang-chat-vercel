@@ -2,7 +2,12 @@
 import styled from 'styled-components'
 import { ReactNode, useEffect, useState } from 'react'
 import React from 'react'
-import { FaUser, FaRobot, FaExclamationTriangle } from 'react-icons/fa'
+import {
+  FaUser,
+  FaRobot,
+  FaExclamationTriangle,
+  FaBookReader,
+} from 'react-icons/fa'
 
 import { useChat } from './useChat'
 import { ButtonWithOptions } from '../../components/atoms/button-with-options/ButtonWithOptions'
@@ -45,16 +50,19 @@ interface ChatStyle {
 const c: ChatStyle = {
   color: {
     assistant: 'white',
+    teacher: 'white',
     user: 'black',
     system: 'black',
   },
   backgroundColor: {
     assistant: '#4a575b',
+    teacher: 'hsl(194, 10%, 25%)',
     user: '#3367f9',
     system: '#ffffff',
   },
   pos: {
     assistant: 'left',
+    teacher: 'left',
     user: 'right',
     system: 'center',
   },
@@ -197,6 +205,7 @@ function ChatMessage({
   return (
     <ChatMessageWrapper $role={$role}>
       {$role === 'assistant' && <FaRobot />}
+      {$role === 'teacher' && <FaBookReader />}
       {$role === 'user' && <FaUser />}
       {$role === 'system' && <FaExclamationTriangle />}
       <ChatMessageText> {children}</ChatMessageText>

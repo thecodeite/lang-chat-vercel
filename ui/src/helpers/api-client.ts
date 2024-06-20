@@ -11,7 +11,7 @@ export interface ChatHistory {
   content: string
 }
 
-export type ChatRole = 'assistant' | 'user' | 'system'
+export type ChatRole = 'teacher' | 'assistant' | 'user' | 'system'
 
 const requests: Record<string, Promise<ChatRecord>> = {}
 
@@ -69,4 +69,23 @@ export function putSingleChatProperty(
     method: 'POST',
     body: value,
   })
+}
+
+export interface ChatGPTResponse {
+  chatResponse: string
+  teacherResponse: string
+}
+
+export async function sendChatGPT(
+  chatId: string,
+  userMessage: string,
+): Promise<ChatGPTResponse | null> {
+  const res = await fetch(`/api/chat-gpt?id=${chatId}`, {
+    method: 'POST',
+    body: userMessage,
+  })
+  if (!res.ok) {
+    return null
+  }
+  return res.json()
 }

@@ -1,9 +1,9 @@
 import OpenAI from 'openai'
-import Session from 'supertokens-node/recipe/session/index.js'
 import { sql } from '@vercel/postgres'
 import { VercelRequest, VercelResponse } from '@vercel/node'
 
 import '../api-lib/init.js'
+import { getUserId } from '../api-lib/get-user-id.js'
 
 const openai = new OpenAI()
 
@@ -11,10 +11,10 @@ export default async function handler(
   request: VercelRequest,
   response: VercelResponse,
 ) {
-  const session = await Session.getSession(request, response)
-  const userId = session.getUserId()
+  const userId = await getUserId(request, response)
 
   const chatId = request.query.id as string
+  const userMessage = request.body
 
   const result =
     await sql`SELECT * FROM chats WHERE owner = ${userId} AND id = ${chatId};`
@@ -29,7 +29,11 @@ export default async function handler(
     (message) => message.content !== undefined && message.content !== '',
   )
 
-  const userMessage = request.body.userMessage
+  console.log('userMessage:', userMessage)
+  if (userMessage === '' || userMessage === undefined || userMessage === null) {
+    return response.status(400).json({ message: 'Empty message' })
+  }
+
   const newChat = [...chat, { role: 'user', content: userMessage }]
 
   //   await sql`
@@ -38,7 +42,7 @@ export default async function handler(
   //   WHERE owner = ${userId} AND id = ${chatId};
   // `
 
-  const truncatedChat = newChat.slice(-6)
+  const truncatedChat = newChat.filter((c) => c.role !== 'teacher').slice(-6)
 
   const instructions = chats[0].instructions
 
@@ -62,10 +66,11 @@ export default async function handler(
     ...truncatedChat,
   ]
 
-  const openAiRequest = {
-    messages,
-    model: 'gpt-4o',
-  }
+  const openAiRequest: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming =
+    {
+      messages,
+      model: 'gpt-4o',
+    }
 
   console.log('openAiRequest:', openAiRequest)
 
@@ -73,9 +78,39 @@ export default async function handler(
 
   console.log('completion:', completion)
 
-  const aiResponse = completion.choices[0].message.content
+  const chatResponse = completion.choices[0].message.content
 
-  const newChat2 = [...newChat, { role: 'assistant', content: aiResponse }]
+  const teacherInstructions = `
+  If the user makes no spelling or grammar mistakes, say "Ok" and do not respond further.
+  You are a language teacher who is testing the user who is learning English. 
+  If they make a mistake, correct them and explain why.
+  If they use a word you think they don't know, explain it to them.
+  The user should be using business English so point out any mistakes they make.
+  Do not ask follow up questions.`
+
+  const teacherMessages = [
+    {
+      role: 'system',
+      content: teacherInstructions,
+    },
+    ...truncatedChat,
+  ]
+
+  const openAiRequest2: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming =
+    {
+      messages: teacherMessages,
+      model: 'gpt-4o',
+    }
+
+  const completion2 = await openai.chat.completions.create(openAiRequest2)
+
+  const teacherResponse = completion2.choices[0].message.content
+
+  const newChat2 = [
+    ...newChat,
+    { role: 'teacher', content: teacherResponse },
+    { role: 'assistant', content: chatResponse },
+  ]
 
   await sql`
   UPDATE chats
@@ -83,5 +118,5 @@ export default async function handler(
   WHERE owner = ${userId} AND id = ${chatId};`
 
   console.log(messages)
-  return response.status(200).send(aiResponse)
+  return response.status(200).send({ chatResponse, teacherResponse })
 }

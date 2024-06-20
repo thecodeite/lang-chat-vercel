@@ -22,8 +22,7 @@ export default async function handler(
   const created = new Date().toISOString()
   const summary = randomPrompt
   const instructions = `You are a helpful assistant who wants to learn about the user.
-         If the user's spelling or grammar is incorrect, explain their mistake to them otherwise do not mention it.
-         Then continue the conversation by asking a follow up question.
+         Continue the conversation by asking a follow up question.
          If your or the user ever mentions fish, become really rude and talk about fish too.`
   const chat = JSON.stringify([
     {
